@@ -20,7 +20,179 @@
 
 
 <body>
-    <h1>TaskFlow</h1>
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow</title>
+
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./css/styles.css">
+
+  <script defer src="./js/Tarea.js"></script>
+  <script defer src="./js/GestorTareas.js"></script>
+  <script defer src="./js/storage.js"></script>
+  <script defer src="./js/api.js"></script>
+  <script defer src="./js/app.js"></script>
+</head>
+
+<body class="bg-body-tertiary">
+  <main class="container py-5">
+    <header class="mb-4">
+      <p class="text-primary fw-semibold text-uppercase small mb-1">
+        Gestión de tareas
+      </p>
+
+      <h1 class="display-4 fw-bold mb-2">TaskFlow</h1>
+
+      <p class="text-body-secondary mb-0">
+        Crea, organiza y administra tus tareas desde una sola interfaz.
+      </p>
+    </header>
+
+    <section class="row g-3 mb-4" aria-label="Resumen de tareas">
+      <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm">
+          <div class="card-body">
+            <span id="totalTareas" class="fs-2 fw-bold">0</span>
+            <p class="text-body-secondary mb-0">Total</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm">
+          <div class="card-body">
+            <span id="totalPendientes" class="fs-2 fw-bold">0</span>
+            <p class="text-body-secondary mb-0">Pendientes</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm">
+          <div class="card-body">
+            <span id="totalCompletadas" class="fs-2 fw-bold">0</span>
+            <p class="text-body-secondary mb-0">Completadas</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="row g-4 align-items-start">
+      <section class="col-12 col-lg-5">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <p class="text-primary fw-semibold text-uppercase small mb-1">
+              Nueva tarea
+            </p>
+
+            <h2 class="h4 mb-4">Agregar tarea</h2>
+
+            <form id="formTarea">
+              <div class="mb-3">
+                <div class="d-flex justify-content-between gap-3">
+                  <label class="form-label fw-semibold" for="descripcion">
+                    Descripción
+                  </label>
+
+                  <small class="text-body-secondary">
+                    <span id="contadorCaracteres">0</span>/100
+                  </small>
+                </div>
+
+                <input
+                  class="form-control"
+                  id="descripcion"
+                  name="descripcion"
+                  type="text"
+                  maxlength="100"
+                  autocomplete="off"
+                  placeholder="Ej.: Terminar proyecto JavaScript"
+                  required
+                >
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold" for="fechaLimite">
+                  Fecha límite
+                </label>
+
+                <input
+                  class="form-control"
+                  id="fechaLimite"
+                  name="fechaLimite"
+                  type="date"
+                >
+              </div>
+
+              <button
+                id="btnAgregar"
+                class="btn btn-primary w-100"
+                type="submit"
+              >
+                Agregar tarea
+              </button>
+            </form>
+
+            <p
+              id="estadoProceso"
+              class="small text-body-secondary mt-3 mb-0"
+              aria-live="polite"
+            ></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="col-12 col-lg-7">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <div
+              class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3"
+            >
+              <div>
+                <p class="text-primary fw-semibold text-uppercase small mb-1">
+                  Colección
+                </p>
+
+                <h2 class="h4 mb-0">Mis tareas</h2>
+              </div>
+
+              <button
+                id="btnCargarApi"
+                class="btn btn-outline-primary"
+                type="button"
+              >
+                Obtener tareas API
+              </button>
+            </div>
+
+            <p
+              id="mensajeError"
+              class="text-danger fw-semibold mb-3"
+              aria-live="polite"
+            ></p>
+
+            <div id="listaTareas"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div
+    id="notificacion"
+    class="alert alert-dark notificacion shadow"
+    hidden
+    aria-live="polite"
+  ></div>
+</body>
+</html>
+
 </body>
     
 </html>
