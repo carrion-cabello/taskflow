@@ -1,5 +1,8 @@
 const gestor = new GestorTareas();
 
+const esperar = (ms) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 const formulario =
   document.querySelector("#formTarea");
 
@@ -67,6 +70,19 @@ const actualizarResumen = () => {
   totalTareas.textContent = String(tareas.length);
   totalPendientes.textContent = String(pendientes);
   totalCompletadas.textContent = String(completadas);
+};
+
+
+const mostrarNotificacion = (mensaje) => {
+  setTimeout(() => {
+    notificacion.textContent = mensaje;
+    notificacion.hidden = false;
+
+    setTimeout(() => {
+      notificacion.hidden = true;
+      notificacion.textContent = "";
+    }, 2500);
+  }, 2000);
 };
 
 const renderizarTareas = () => {
@@ -190,7 +206,7 @@ const renderizarTareas = () => {
 
 formulario.addEventListener(
   "submit",
-  (evento) => {
+  async (evento) => {
     evento.preventDefault();
 
     mensajeError.textContent = "";
@@ -207,6 +223,13 @@ formulario.addEventListener(
       return;
     }
 
+    estadoProceso.textContent =
+      "Agregando tarea...";
+
+    btnAgregar.disabled = true;
+
+    await esperar(700);
+
     const nuevaTarea = new Tarea(
       Date.now(),
       descripcionValor,
@@ -220,8 +243,11 @@ formulario.addEventListener(
 
     formulario.reset();
     contadorCaracteres.textContent = "0";
+    estadoProceso.textContent = "";
+    btnAgregar.disabled = false;
   }
 );
+
 listaTareas.addEventListener(
   "click",
   (evento) => {
@@ -293,6 +319,7 @@ listaTareas.addEventListener(
     }
   }
 );
+
 descripcion.addEventListener(
   "keyup",
   () => {
@@ -348,3 +375,58 @@ listaTareas.addEventListener(
     );
   }
 );
+
+formulario.addEventListener(
+  "submit",
+  async (evento) => {
+    evento.preventDefault();
+
+    if (btnAgregar.disabled) {
+      return;
+    }
+
+    mensajeError.textContent = "";
+
+    const descripcionValor =
+      descripcion.value.trim();
+
+    const fechaLimiteValor =
+      fechaLimite.value || null;
+
+    if (descripcionValor === "") {
+      mensajeError.textContent =
+        "La descripción no puede quedar vacía.";
+      return;
+    }
+
+    estadoProceso.textContent =
+      "Agregando tarea...";
+
+    btnAgregar.disabled = true;
+
+    await esperar(700);
+
+    const nuevaTarea = new Tarea(
+      Date.now(),
+      descripcionValor,
+      "pendiente",
+      new Date().toISOString(),
+      fechaLimiteValor
+    );
+
+
+    
+    gestor.agregarTarea(nuevaTarea);
+    renderizarTareas();
+
+    formulario.reset();
+    contadorCaracteres.textContent = "0";
+    estadoProceso.textContent = "";
+    btnAgregar.disabled = false;
+
+    mostrarNotificacion(
+      "La tarea fue agregada a TaskFlow."
+    );
+  }
+);
+
