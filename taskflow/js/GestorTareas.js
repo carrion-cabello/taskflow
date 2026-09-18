@@ -49,7 +49,8 @@ class GestorTareas {
     tarea.eliminar();
 
     this.tareas = this.tareas.filter(
-      ({ eliminada }) => !eliminada
+      (tareaActual) =>
+        !tareaActual.eliminada
     );
 
     return true;
@@ -61,7 +62,27 @@ class GestorTareas {
     }
 
     return this.tareas.filter(
-      ({ estado }) => estados.includes(estado)
+      ({ estado }) =>
+        estados.includes(estado)
+    );
+  }
+
+  cargarTareas(datos) {
+    this.tareas = datos.map(
+      ({
+        id,
+        descripcion,
+        estado,
+        fechaCreacion,
+        fechaLimite
+      }) =>
+        new Tarea(
+          id,
+          descripcion,
+          estado,
+          fechaCreacion,
+          fechaLimite
+        )
     );
   }
 }
