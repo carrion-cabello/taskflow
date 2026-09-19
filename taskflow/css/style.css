@@ -1,3 +1,4 @@
+/* Estilos específicos de TaskFlow para transiciones, resaltados y notificaciones */
 .tarea {
   transition:
     transform 150ms ease,
